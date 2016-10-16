@@ -14,6 +14,8 @@ protected:
   void init();
   void copyNodes(ListNodePosi(T), int);
   int clear();
+  void selectionSort(ListNodePosi(T), int);
+  void inserSort(ListNodePosi(T), int);
 
 public:
   //constructor
@@ -24,9 +26,11 @@ public:
   T &operator[](Rank r) const;
   ListNodePosi(T) first() const { return header->succ; }
   ListNodePosi(T) last() const { return trailer->pred; }
-  //
   ListNodePosi(T) find(T const &e) const { return find(e, _size, trailer); }
   ListNodePosi(T) find(T const &e, int n, ListNodePosi(T) p) const;
+  ListNodePosi(T) selectMax(ListNodePosi(T) p, int n);
+  ListNodePosi(T) selectMax() { return slectMax(header->succ, _size); }
+  //write
   ListNodePosi(T) insertA(ListNodePosi(T), T const &);
   ListNodePosi(T) insertB(ListNodePosi(T), T const &);
   ListNodePosi(T) insertAsFirst(T const &);
@@ -140,5 +144,30 @@ int List<T>::deduplicate()
     q ? remove(q) : r++;
   }
   return oldSize - _size;
+}
+template <typename T>
+ListNodePosi(T) List<T>::selectMax(ListNodePosi(T) p, int n)
+{
+  ListNodePosi(T) max = p;
+  for (ListNodePosi(T) cur = p; 1 < n; n--)
+  {
+    if (((cur = cur->succ)->data) >= (max->data))
+      max = cur;
+  }
+  return max;
+}
+template <typename T>
+void List<T>::selectionSort(ListNodePosi(T) p, int n)
+{
+  ListNodePosi(T) head = p->pred, tail = p;
+  for (int i = 0; i < n; i++)
+    tail = tail->succ;
+  while (1 < n)
+  {
+    ListNodePosi(T) max = selectMax(head->succ, n);
+    insertB(tail, remove(max));
+    tail = tail->pred;
+    n--;
+  }
 }
 #endif
