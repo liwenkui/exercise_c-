@@ -17,7 +17,7 @@ inline double Sales_data::avg_price() const
     return avg;
 }
 
-Sales_data::Sales_data(istream &is):Sales_data()
+Sales_data::Sales_data(istream &is) : Sales_data()
 {
     read(is, *this);
 }
@@ -40,4 +40,9 @@ ostream &print(ostream &os, const Sales_data &item)
     os << item.isbn() << " " << item.units_sold << " "
        << item.revenue << " " << item.avg_price();
     return os;
+}
+
+bool compareIsbn(Sales_data const &lo, Sales_data const &hi)
+{
+    return lo.isbn().size() < hi.isbn().size();
 }
