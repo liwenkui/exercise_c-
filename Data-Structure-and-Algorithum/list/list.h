@@ -33,12 +33,22 @@ public:
   //write
   ListNodePosi(T) insertA(ListNodePosi(T), T const &);
   ListNodePosi(T) insertB(ListNodePosi(T), T const &);
+  ListNodePosi(T) isnertRB(ListNodePosi(T));
   ListNodePosi(T) insertAsFirst(T const &);
   ListNodePosi(T) insertAsLast(T const &);
   T remove(ListNodePosi(T) p);
   //
   int deduplicate();
 };
+template<typename T>
+ListNodePosi(T) List::insertRB(ListNodePosi(T) b){
+  b->pred->succ=b->succ;
+  b->succ->pred=b->pred;
+  b->pred=this;
+  b->succ=this->succ;
+  this->succ=b;
+  return this;
+}
 
 template <typename T>
 void List<T>::init()
