@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     if (!total.isbn().empty())
     {
 	Sales_data trans;
-	while (read(in, trans))
+	while (in>>trans)
 	{
 	    if (total.isbn() == trans.isbn())
 	    {
@@ -20,10 +20,10 @@ int main(int argc, char *argv[])
 	    }
 	    else
 	    {
-		print(cout, total) << endl;
+		cout<<total << endl;
 		total = trans;
 	    }
-	    print(cout, total) << endl;
+	    cout << total << endl;
 	}
     }
     else

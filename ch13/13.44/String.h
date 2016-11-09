@@ -39,4 +39,5 @@ class String{
 	char *p =nullptr;
 };
 std::allocator<char>String::a;
+
 #endif
