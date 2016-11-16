@@ -1,9 +1,14 @@
 #include "vector.h"
-#include <vector>
-using std::vector;
+#include <iostream>
+using namespace std;
 int main()
 {
     Vector<int> iVec;
-    vector<int> ivec;
+	for(int i=0;i<100;i++)
+	iVec.insert(0,i);
+	iVec.disordered();
+	for(int i=0;i<100;i++)
+	cout<<iVec[i]<<" ";
+	cout<<endl;	
     return 0;
 }

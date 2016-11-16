@@ -125,15 +125,10 @@ static Rank binSearch(T *A, T const &e, Rank lo, Rank hi)
 {
     while (lo < hi)
     {
-        Rank mi = (lo + hi) >> 1;
-        if (e < A[mi])
-            hi = mi;
-        else if (A[mi] < e)
-            lo = mi + 1;
-        else
-            return mi;
-    }
-    return -1;
+		Rank mi=(lo+hi)>>1;
+		(e<A[mi])?hi=mi:lo=mi+1;
+	}
+	return --lo;
 }
 
 template <typename T> void Vector<T>::traverse(void (*visit) (T&)){
@@ -186,5 +181,10 @@ void Vector<T>::merge(Rank lo,Rank mi,Rank hi){
 	delete [] B;
 }	
 
-
-
+template<typename T>struct Decrease{
+	virtual void operator()(T&e){e--;}
+};
+template<typename T>void decrease(Vector<T> &V){
+	V.traverse(Decrease<T>());
+}
+			
