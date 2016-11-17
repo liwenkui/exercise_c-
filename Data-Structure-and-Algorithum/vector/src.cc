@@ -1,11 +1,13 @@
 #include "vector.h"
+#include <cstdlib>
+#include <algorithm>
 using namespace std;
 template <typename T>
 void Vector<T>::copyFrom(T const *A, Rank lo, Rank hi)
 {
     _elem = new T[_capacity = 2 * (hi - lo)];
     _size = 0;
-    if (lo < hi)
+    while (lo < hi)
         _elem[_size++] = A[lo++];
 }
 template <typename T>
@@ -171,12 +173,11 @@ void Vector<T>::merge(Rank lo,Rank mi,Rank hi){
 	T*A = _elem + lo;
 	int lb = mi-lo;
 	T*B = new T[lb];
-	for(Rank i=0;i<lb;B[i]=A[i++]);
+	for(Rank i=0;i<lb;++i)
+		B[i]=A[i];
 	int lc=hi-mi;
 	T*C = _elem +mi;
-	for(Rank i=0,j=0,k=0;(j<lb)&&(k<lc);){
-	if((j<lb)&&(!(k<lc)||(B[j]<=C[k]))) A[i++]=B[j++];
-	if((k<lc)&&(!(j<lb)||(C[k]<B[j])))  A[i++]=C[k++];
+	for(Rank i=0,j=0,k=0;(j<lb)||(k<lc);){
 	}
 	delete [] B;
 }	
@@ -188,3 +189,10 @@ template<typename T>void decrease(Vector<T> &V){
 	V.traverse(Decrease<T>());
 }
 			
+template<typename T>
+void Vector<T>::sort(Rank lo,Rank hi){
+	mergeSort(lo,hi);
+}	
+
+
+

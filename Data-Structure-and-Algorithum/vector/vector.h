@@ -1,11 +1,11 @@
 #ifndef VECTOR
 #define VECTOR
 #define DEFAULT_CAPACITY 3
-#include <cstdlib>
 typedef int Rank;
 template <typename T>
 class Vector
 {
+	friend bool operator<(Vector const&,Vector const&);
 	protected:
 		Rank _size;
 		int _capacity;
@@ -61,4 +61,18 @@ class Vector
 		void traverse(void(*) (T&));
 		template <typename VST> void traverse (VST &);
 };
+
+template<typename T>
+bool operator<(Vector<T> const &lh,Vector<T> const &rh){
+	if(lh.size()<rh.size())
+		return true;
+	else if(lh._elem[0]<rh._elem[0])
+		return true;
+	else if(c_lh(lh).remove(0)<c_rh(rh).remove(0))
+		return true;
+	else
+		return false;
+}
+
+#include "src.cc"
 #endif
