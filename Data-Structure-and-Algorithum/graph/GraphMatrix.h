@@ -31,9 +31,9 @@ class GraphMatrix : public Graph<Tv, Te>
 	private:
 		std::vector<Vertex<Tv>> V;
 		std::vector<std::vector<Edge<Te>*>> E;
+	public:
 		using Graph<Tv,Te>::n;
 		using Graph<Tv,Te>::e;
-	public:
 		GraphMatrix() { n = e = 0; }
 		~GraphMatrix(){
 			for(int j=0;j<n;j++)
