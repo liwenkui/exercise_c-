@@ -14,41 +14,53 @@ protected:
   void init();
   void copyNodes(ListNodePosi(T), int);
   int clear();
+  void merge(ListNodePosi(T)&,int ,List<T>&,ListNodePosi(T),int);
+  void mergeSort(ListNodePosi(T)&,int);
   void selectionSort(ListNodePosi(T), int);
-  void inserSort(ListNodePosi(T), int);
+  void insertionSort(ListNodePosi(T), int);
 
 public:
   //constructor
   List() { init(); }
+  List(List<T> const&L){
+	   copyNodes(L.first(),L._size);}
+  List(List<T> const&L,Rank r,int n){
+	  copyNodes(L[r],n);}
+  List(ListNodePosi(T) p,int n){
+	  copyNodes(p,n);}
   //distructor
   ~List();
   //read interface
+  Rank size() const {return _size;}
+  bool empty() const { return _size<=0;}
   T &operator[](Rank r) const;
   ListNodePosi(T) first() const { return header->succ; }
   ListNodePosi(T) last() const { return trailer->pred; }
+  bool valid(ListNodePosi(T) p)
+  {return p&&(trailer!=p)&&(header!=p);}
+  int disordered() const;
   ListNodePosi(T) find(T const &e) const { return find(e, _size, trailer); }
   ListNodePosi(T) find(T const &e, int n, ListNodePosi(T) p) const;
+  ListNodePosi(T) search(T const &e)const {return search(e,_size,trailer);}
+  ListNodePosi(T) search(T const &e,int n,ListNodePosi(T) p) const;
   ListNodePosi(T) selectMax(ListNodePosi(T) p, int n);
   ListNodePosi(T) selectMax() { return slectMax(header->succ, _size); }
   //write
   ListNodePosi(T) insertA(ListNodePosi(T), T const &);
   ListNodePosi(T) insertB(ListNodePosi(T), T const &);
-  ListNodePosi(T) isnertRB(ListNodePosi(T));
   ListNodePosi(T) insertAsFirst(T const &);
   ListNodePosi(T) insertAsLast(T const &);
   T remove(ListNodePosi(T) p);
-  //
+  void merge(List<T>& L){merge(first(),_size,L,L.first(),L._size);}
+  void sort(){sort(first(),_size);}
+  void sort(ListNodePosi(T) p,int n);
   int deduplicate();
+  int uniquify();
+  void reverse();
+  //traverse
+  template<typename VST>
+	  void traverse(VST &);
 };
-template<typename T>
-ListNodePosi(T) List::insertRB(ListNodePosi(T) b){
-  b->pred->succ=b->succ;
-  b->succ->pred=b->pred;
-  b->pred=this;
-  b->succ=this->succ;
-  this->succ=b;
-  return this;
-}
 
 template <typename T>
 void List<T>::init()
@@ -61,6 +73,7 @@ void List<T>::init()
   trailer->pred = header;
   _size = 0;
 }
+
 template <typename T>
 T &List<T>::operator[](Rank r) const
 {
@@ -71,6 +84,7 @@ T &List<T>::operator[](Rank r) const
   }
   return p->data;
 }
+
 template <typename T>
 ListNodePosi(T) List<T>::find(T const &e, int n, ListNodePosi(T) p) const
 {
@@ -146,8 +160,8 @@ int List<T>::deduplicate()
   if (_size < 2)
     return 0;
   int oldSize = _size;
-  ListNodePosi(T) p;
-  Rank r = 1;
+  ListNodePosi(T) p=header;
+  Rank r = 0;
   while (trailer != (p = p->succ))
   {
     ListNodePosi(T) q = find(p->data, r, p);
@@ -167,6 +181,14 @@ ListNodePosi(T) List<T>::selectMax(ListNodePosi(T) p, int n)
   return max;
 }
 template <typename T>
+void List<T>::insertionSort(ListNodePosi(T) p, int n){
+	for(int r=0;r<n;r++){
+		insertA(search(p->data,r,p),p->data);
+		p=p->succ;
+		remove(p->pred);
+	}
+}
+template <typename T>
 void List<T>::selectionSort(ListNodePosi(T) p, int n)
 {
   ListNodePosi(T) head = p->pred, tail = p;
@@ -175,9 +197,70 @@ void List<T>::selectionSort(ListNodePosi(T) p, int n)
   while (1 < n)
   {
     ListNodePosi(T) max = selectMax(head->succ, n);
-    insertB(tail, remove(max));
+    //insertB(tail, remove(max));
+	//swap(tail->pred->data,max->data);
+	if(tail->pred!=max)
+		swap(tail->pred->data,max->data);
     tail = tail->pred;
     n--;
   }
+}
+template<typename T>
+int List<T>::uniquify(){
+	if(_size<2) return 0;
+	int oldSize=_size;
+	ListNodePosi(T) p=first();
+	ListNodePosi(T) q;
+	while(trailer!=(q=p->succ))
+		if(p->data!=q->data)
+			p=q;
+		else remove(q);
+	return oldSize-_size;
+}
+template<typename T>
+ListNodePosi(T) List<T>::search(T const& e,int n,ListNodePosi(T) p)const{
+	while(0<=n--)
+		if(((p=p->pred)->data)<=e)break;
+	return p;
+}
+
+template<typename T> template<typename VST>
+void List<T>::traverse(VST& visit){
+	for(ListNodePosi(T) p=header->succ;p!=trailer;p=p->succ)
+		visit(p->data);
+}
+template<typename T>
+void List<T>::mergeSort(ListNodePosi(T)& p,int n){
+	if(n<2) return;
+	int m=n>>1;
+	ListNodePosi(T) q=p;
+	for(int i=0;i<m;i++)
+		q=q->succ;
+	mergeSort(p,m);
+	mergeSort(q,n-m);
+	merge(p,m,*this,q,n-m);
+}
+
+template<typename T>
+void List<T>::merge(ListNodePosi(T) &p,int n,List<T> &L,ListNodePosi(T) q,int m){
+	ListNodePosi(T) pp = p->pred;
+	while(0<m)
+		if((0<n)&&(p->data<=q->data)){
+			if(q==(p=p->succ))
+				break;
+			n--;
+		}else{
+			insertB(p,L.remove((q=q->succ)->pred));
+			m--;
+		}
+	p = pp->succ;
+}
+template<typename T>
+void List<T>::reverse()
+{
+	ListNodePosi(T) p=header;
+	ListNodePosi(T) q=trailer;
+	for(int i=1;i<_size();i+=2)
+		swap((p=p->succ)->data,(q=q->pred)->data);
 }
 #endif

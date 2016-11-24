@@ -116,14 +116,10 @@ int Vector<T>::uniquify()
     shrink();
     return j - i;
 }
-template <typename T>
-Rank Vector<T>::search(T const& e,Rank lo,Rank hi)const {
-	return (rand()%2)?
-		binSearch(_elem,e,lo,hi):fibSearch(_elem,e,lo,hi);
-}
+
 
 template <typename T>
-static Rank binSearch(T *A, T const &e, Rank lo, Rank hi)
+Rank binSearch(T *A, T const &e, Rank lo, Rank hi)
 {
     while (lo < hi)
     {
@@ -131,6 +127,11 @@ static Rank binSearch(T *A, T const &e, Rank lo, Rank hi)
 		(e<A[mi])?hi=mi:lo=mi+1;
 	}
 	return --lo;
+}
+
+template <typename T>
+Rank Vector<T>::search(T const& e,Rank lo,Rank hi)const {
+		return binSearch(_elem,e,lo,hi);
 }
 
 template <typename T> void Vector<T>::traverse(void (*visit) (T&)){
@@ -191,8 +192,40 @@ template<typename T>void decrease(Vector<T> &V){
 			
 template<typename T>
 void Vector<T>::sort(Rank lo,Rank hi){
-	mergeSort(lo,hi);
+	//mergeSort(lo,hi);
+	//insertionSort(lo,hi);
+	selectionSort(lo,hi);
 }	
+
+//3-8 exercise
+template<typename T>
+void Vector<T>::insertionSort(Rank lo,Rank hi){
+	T*A = _elem+lo;
+	T*B = _elem+hi;	
+	Rank p=0;
+	while(p!=(hi-lo)){
+		Rank posi=search(A[p],0,p);
+		Rank p1=p;
+		Rank p2=p-1;
+		while(p2!=posi)
+			swap(A[p1--],A[p2--]);
+		p++;	
+	}
+}
+//3-9
+template<typename T>
+Rank Vector<T>::max(Rank lo,Rank hi){
+	Rank mx=hi;
+	while(lo<hi--)
+		if(_elem[hi]>_elem[mx])
+			mx=hi;
+	return mx;
+}
+template <typename T>
+void Vector<T>::selectionSort(Rank lo,Rank hi){
+	while(lo<--hi)
+		swap(_elem[max(lo,hi)],_elem[hi]);
+}
 
 
 

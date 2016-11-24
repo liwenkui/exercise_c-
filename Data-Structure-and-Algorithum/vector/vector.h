@@ -2,10 +2,15 @@
 #define VECTOR
 #define DEFAULT_CAPACITY 3
 typedef int Rank;
+
+template <typename T> class Vector;
+template <typename T>
+bool operator<(Vector<T> const&,Vector<T> const&);
+
 template <typename T>
 class Vector
 {
-	friend bool operator<(Vector const&,Vector const&);
+	friend bool operator< <T>(Vector<T> const&,Vector<T> const&);
 	protected:
 		Rank _size;
 		int _capacity;
@@ -16,7 +21,8 @@ class Vector
 		bool bubble(Rank lo,Rank hi);
 		void bubbleSort(Rank lo,Rank hi);
 		Rank max(Rank lo,Rank hi);
-		void selectinSort(Rank lo,Rank hi);
+		void insertionSort(Rank lo,Rank hi);
+		void selectionSort(Rank lo,Rank hi);
 		void merge(Rank lo,Rank mi,Rank hi);
 		void mergeSort(Rank lo,Rank hi);
 		Rank partition (Rank lo, Rank hi);
@@ -37,7 +43,7 @@ class Vector
 		//destructor
 		~Vector() { delete[] _elem; }
 		//read
-		Rank size() { return _size; }
+		Rank size() const { return _size; }
 		bool empty() {return !_size;}
 		int disordered() const;
 		Rank find(T const &e) const { return find(e, 0, _size); }
@@ -68,7 +74,7 @@ bool operator<(Vector<T> const &lh,Vector<T> const &rh){
 		return true;
 	else if(lh._elem[0]<rh._elem[0])
 		return true;
-	else if(c_lh(lh).remove(0)<c_rh(rh).remove(0))
+	else if(Vector<T>(lh).remove(0)<Vector<T>(rh).remove(0))
 		return true;
 	else
 		return false;
