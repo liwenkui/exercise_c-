@@ -25,7 +25,9 @@ typedef enum{RB_RED,RB_BLACK} RBColor;
 template<typename T>
 struct BinNode{
 	T data;
-	BinNodePosi(T) parent,lc,rc;
+	BinNodePosi(T) parent;
+	BinNodePosi(T) lc;
+	BinNodePosi(T) rc;
 	int height;
 	int npl;
 	RBColor color;
@@ -40,6 +42,7 @@ struct BinNode{
 	BinNodePosi(T) insertAsLC(T const&);
 	BinNodePosi(T) insertAsRC(T const&);
 	BinNodePosi(T) succ();
+	BinNodePosi(T) pred();
 	template <typename VST> void travLeval(VST&);
 	template <typename VST> void travPre(VST&);
 	template <typename VST> void travIn(VST&);

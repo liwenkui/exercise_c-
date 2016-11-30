@@ -5,7 +5,14 @@
 #include <memory>
 #include <initializer_list>
 #include <exception>
+
+template<typename T> class BlobPtr;
+template<typename T> class Blob;
+template<typename T>
+bool operator==(const Blob<T>&, const Blob<T>&);
 template<typename T> class Blob{
+	friend class BlobPtr<T>;
+	friend bool operator==<T>(const Blob<T>&, const Blob<T>&);
 	public:
 		typedef T value_type;
 		typedef typename std::vector<T>::size_type size_type;
@@ -38,7 +45,7 @@ void Blob<T>::check(size_type i,const std::string &msg) const{
 }
 template<typename T>
 void Blob<T>::pop_back(){
-	check(0,"back on empty Blob");
+	check(0,"pop_back on empty Blob");
 	return data->pop_back();
 }
 template<typename T>

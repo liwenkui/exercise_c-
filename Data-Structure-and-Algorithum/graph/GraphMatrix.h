@@ -1,6 +1,6 @@
 #ifndef GRAPHMATRIX_H
 #define GRAPHMATRIX_H
-#include <vector>
+#include "../vector/vector.h"
 #include "Graph.h"
 
 template <typename Tv>
@@ -29,8 +29,8 @@ template <typename Tv,typename Te>
 class GraphMatrix : public Graph<Tv, Te>
 {
 	private:
-		std::vector<Vertex<Tv>> V;
-		std::vector<std::vector<Edge<Te>*>> E;
+		Vector<Vertex<Tv>> V;
+		Vector<Vector<Edge<Te>*>> E;
 	public:
 		using Graph<Tv,Te>::n;
 		using Graph<Tv,Te>::e;
@@ -62,8 +62,8 @@ class GraphMatrix : public Graph<Tv, Te>
 		{
 			for (int j = 0; j < n; j++)
 				E[j].insert(nullptr);
-			n++;
-			E.insert(std::vector<Edge<Te> *>(n, n, (Edge<Te> *)nullptr));
+			n++;//vertex
+			E.insert(Vector<Edge<Te> *>(n, n, (Edge<Te> *)nullptr));
 			return V.insert(Vertex<Tv>(vertex));
 		}
 		virtual Tv remove(int i){
