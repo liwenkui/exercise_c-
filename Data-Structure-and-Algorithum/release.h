@@ -1,3 +1,5 @@
+#ifndef RELEASE_H
+#define RELEASE_H
 #include <typeinfo>
 template <typename T> struct Cleaner {
    static void clean ( T x ) { 
@@ -23,3 +25,4 @@ template <typename T> struct Cleaner<T*> {
 };
 
 template <typename T> void release ( T x ) { Cleaner<T>::clean ( x ); }
+#endif

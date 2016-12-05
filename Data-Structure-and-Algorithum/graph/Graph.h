@@ -1,6 +1,6 @@
 #ifndef GRAPH_H
 #define GRAPH_H
-#include <stack>
+#include "../stack/stack.h"
 #include <climits>
 typedef enum { UNDISCOVERED,
 	       DISCOVERED,
@@ -30,8 +30,9 @@ class Graph
     }
     void BFS(int, int &);
     void DFS(int, int &);
-    void BCC(int, int &, std::stack<int>& );
-	bool TSort(int,int,std::stack<Tv> *);
+	void DFS_I(int, int &);
+    void BCC(int, int &, Stack<int>& );
+	bool TSort(int,int&,Stack<Tv>*);
 	template <typename PU>void PFS(int,PU);
   public:
     //
@@ -60,9 +61,12 @@ class Graph
     void bfs(int);
     void dfs(int);
     void bcc(int);
-	std::stack<Tv>* tSort(int);
+	Stack<Tv>* tSort(int);
 	void prim(int);
 	void dijkstra(int);
 	template<typename PU> void pfs(int,PU);
 };
+
+#include "graph_imp.h"
+
 #endif

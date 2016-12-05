@@ -9,12 +9,13 @@ int BinTree<T>::updateHeight(BinNodePosi(T) x)
 }
 template<typename T>
 void BinTree<T>::updateHeightAbove(BinNodePosi(T) x){
-	while(x){
-		int P_height = x->height;
-		updateHeight(x);
-		if(x->height==P_height) break;
-		x=x->parent;
-	}
+//	while(x){
+//		int P_height = x->height;
+//		updateHeight(x);
+//		if(x->height==P_height) break;
+//		x=x->parent;
+//	}
+	while(x){updateHeight(x);x=x->parent;}
 }
 
 template<typename T>
