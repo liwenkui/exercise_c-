@@ -1,6 +1,7 @@
 #include "vector.h"
 #include <cstdlib>
 #include <algorithm>
+#include "../pq_complheap/pq_complheap.h"
 using namespace std;
 template <typename T>
 void Vector<T>::copyFrom(T const *A, Rank lo, Rank hi)
@@ -227,5 +228,10 @@ void Vector<T>::selectionSort(Rank lo,Rank hi){
 		swap(_elem[max(lo,hi)],_elem[hi]);
 }
 
-
+template<typename T>
+void Vector<T>::heapSort(Rank lo,Rank hi){
+	PQ_ComplHeap<T> H(_elem+lo,hi-lo);
+	while (!H.empty())
+		_elem[--hi]=H.delMax();
+}
 
