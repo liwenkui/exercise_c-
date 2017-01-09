@@ -1,4 +1,5 @@
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -8,6 +9,7 @@ using namespace std;
 
 map<string,string> buildMap(ifstream &map_file){
 	map<string,string> trans_map;
+	unordered_map<string,string> utrans_map;
 	string key;
 	string value;
 	while(map_file>>key&&getline(map_file,value))
